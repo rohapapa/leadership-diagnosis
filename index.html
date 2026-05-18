@@ -1,0 +1,210 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.wrap{max-width:680px;margin:0 auto;padding:1.5rem 1rem}
+h1{font-size:22px;font-weight:500;color:#2BAB7A;margin-bottom:.25rem}
+.subtitle{font-size:14px;color:var(--color-text-secondary);margin-bottom:1.5rem}
+.scale-bar{display:flex;gap:4px;margin-bottom:1.5rem;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem 1rem}
+.scale-item{flex:1;text-align:center;font-size:11px;color:var(--color-text-secondary)}
+.scale-item span{display:block;font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.q-list{display:flex;flex-direction:column;gap:0}
+.q-row{display:grid;grid-template-columns:1fr 5fr repeat(5,1fr);align-items:center;border-bottom:.5px solid var(--color-border-tertiary);padding:.6rem 0;gap:8px}
+.q-row:first-child{background:var(--color-background-secondary);border-radius:var(--border-radius-md) var(--border-radius-md) 0 0;font-size:12px;font-weight:500;color:var(--color-text-secondary);padding:.5rem .5rem}
+.q-num{font-size:13px;font-weight:500;color:var(--color-text-secondary);text-align:center}
+.q-text{font-size:13px;color:var(--color-text-primary);line-height:1.5}
+.radio-cell{display:flex;justify-content:center}
+input[type=radio]{width:18px;height:18px;cursor:pointer;accent-color:#2BAB7A}
+.result-section{margin-top:2rem;display:none}
+.result-section.show{display:block}
+.score-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.5rem}
+.score-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem 1rem;text-align:center}
+.score-label{font-size:12px;color:var(--color-text-secondary)}
+.score-val{font-size:24px;font-weight:500}
+.type-card{border-radius:var(--border-radius-lg);padding:1.25rem 1.5rem;margin-bottom:1rem;border:.5px solid var(--color-border-tertiary)}
+.type-name{font-size:18px;font-weight:500;margin-bottom:.25rem}
+.type-tag{font-size:12px;margin-bottom:.75rem;display:inline-block;padding:2px 10px;border-radius:999px}
+.type-desc{font-size:14px;color:var(--color-text-secondary);line-height:1.6}
+.btn{display:block;width:100%;padding:.75rem;background:#2BAB7A;color:#fff;border:none;border-radius:var(--border-radius-md);font-size:15px;font-weight:500;cursor:pointer;margin-top:1rem}
+.btn:hover{background:#239066}
+.btn-reset{background:transparent;color:var(--color-text-secondary);border:.5px solid var(--color-border-secondary);margin-top:.75rem}
+.btn-reset:hover{background:var(--color-background-secondary);color:var(--color-text-primary)}
+svg.diamond{overflow:visible}
+.progress{font-size:13px;color:var(--color-text-secondary);margin-top:.5rem;text-align:right}
+</style>
+
+<div class="wrap">
+<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden">리더십 유형 진단 도구 — 16개 문항에 응답하면 지시형, 위임형, 참여형, 온정형 중 유형을 알 수 있습니다.</h2>
+<h1>리더십 유형 진단</h1>
+<p class="subtitle">각 문항에 해당하는 점수를 선택해 주세요.</p>
+
+<div class="scale-bar">
+  <div class="scale-item"><span>5점</span>매우 그렇다</div>
+  <div class="scale-item"><span>4점</span>그런 편이다</div>
+  <div class="scale-item"><span>3점</span>보통이다</div>
+  <div class="scale-item"><span>2점</span>별로 아니다</div>
+  <div class="scale-item"><span>1점</span>전혀 아니다</div>
+</div>
+
+<div class="q-list" id="qlist"></div>
+<p class="progress" id="progress">0 / 16 응답</p>
+
+<button class="btn" onclick="calcResult()">진단 결과 보기 →</button>
+
+<div class="result-section" id="result">
+  <div class="score-grid" id="scoreGrid"></div>
+  <svg class="diamond" id="diamondSvg" viewBox="0 0 300 300" width="300" height="300" style="display:block;margin:0 auto 1.5rem" role="img" aria-label="리더십 유형 다이아몬드 차트">
+    <title>리더십 유형 다이아몬드 차트</title>
+    <g id="diamondG"></g>
+  </svg>
+  <div class="type-card" id="typeCard"></div>
+  <button class="btn btn-reset" onclick="resetAll()">다시 진단하기</button>
+</div>
+</div>
+
+<script>
+const qs=[
+  "어떤 문제를 결정하거나 행동으로 옮기기 전에 직원들의 상황이나 의견을 듣는다.",
+  "직원들에게 무엇을 하고 싶은지를 듣기보다 무엇을 해야 할지 정확하게 지시하는 편이다.",
+  "능력에 따라 처우에 너무 큰 차별을 두는 것을 좋아하지 않는다.",
+  "가능한 한 의사결정에 참여하거나 간섭하지 않는다.",
+  "조직구성원이 우선이므로 리더가 희생하는 것은 당연하다.",
+  "비판하기보다는 칭찬을 많이 하는 편이며, 직원들의 선의에 호소해 설득한다.",
+  "개인보다는 조직을 중시하며, 구성원 각자에게 역할과 책임을 확정해준다.",
+  "일이 잘 진행되지 않을지라도 직원들의 개인적인 문제나 고민을 듣는 것이 더 중요하다.",
+  "직원들이 잘못한 일에 대해 피드백하고 교정하려고 한다.",
+  "동기부여의 수단으로 직원 개인의 충성심을 활용한다.",
+  "혼자 있기보다는 가능하면 직원들과 함께 어울리려고 노력한다.",
+  "의견 대립은 새로운 해결책을 만들기 위해 필요한 것이다.",
+  "팀 내 인간관계의 분쟁에 말려드는 것은 가능한 한 피하려고 한다.",
+  "상대의 의견을 인정하고 최대한 채택해주는 것이 동기부여가 가장 많이 된다.",
+  "리더는 알보이지 않도록 직원들보다 능력이 뛰어난 것이 바람직하다.",
+  "직원들에게 의욕과 자신감을 갖도록 하는 것이 리더에게 특히 중요하다."
+];
+
+const mapping={A:[2,7,9,15],B:[4,5,13,14],C:[1,8,12,16],D:[3,6,10,11]};
+
+const types={
+  A:{name:"지시형",tag:"나를 따르라!",color:"#1A9E75",light:"#E1F5EE",desc:"명확한 방향 제시와 과업 중심 리더십을 발휘합니다. 구성원에게 역할과 책임을 분명히 부여하고, 성과 기준을 높게 유지합니다. 빠른 의사결정과 실행력이 강점입니다."},
+  B:{name:"위임형",tag:"니들이 고생이 많다",color:"#D85A30",light:"#FAECE7",desc:"구성원의 자율성을 존중하고 권한을 적극적으로 위임합니다. 간섭을 최소화하며 결과보다 과정을 믿는 스타일입니다. 성숙한 팀에서 높은 성과를 이끌어냅니다."},
+  C:{name:"참여형",tag:"네 마음을 보여줘",color:"#555",light:"#F1EFE8",desc:"구성원의 의견을 적극적으로 수렴하고 공동의사결정을 중시합니다. 갈등을 창의적 해결의 기회로 봅니다. 다양성과 협업을 통해 혁신을 이끄는 스타일입니다."},
+  D:{name:"온정형",tag:"우리가 남이가",color:"#2BAB7A",light:"#E1F5EE",desc:"관계와 배려를 중심에 두는 리더십입니다. 구성원 개개인의 감정과 상황에 공감하며 팀의 화합을 이끕니다. 신뢰를 기반으로 장기적 충성도를 형성합니다."}
+};
+
+const list=document.getElementById('qlist');
+const header=document.createElement('div');
+header.className='q-row';
+header.innerHTML='<div></div><div></div><div style="text-align:center">5</div><div style="text-align:center">4</div><div style="text-align:center">3</div><div style="text-align:center">2</div><div style="text-align:center">1</div>';
+list.appendChild(header);
+
+qs.forEach((q,i)=>{
+  const row=document.createElement('div');
+  row.className='q-row';
+  let radios='';
+  [5,4,3,2,1].forEach(v=>{
+    radios+=`<div class="radio-cell"><input type="radio" name="q${i+1}" value="${v}" onchange="updateProgress()"></div>`;
+  });
+  row.innerHTML=`<div class="q-num">${i+1}</div><div class="q-text">${q}</div>${radios}`;
+  list.appendChild(row);
+});
+
+function updateProgress(){
+  let count=0;
+  for(let i=1;i<=16;i++){
+    if(document.querySelector(`input[name="q${i}"]:checked`))count++;
+  }
+  document.getElementById('progress').textContent=`${count} / 16 응답`;
+}
+
+function calcResult(){
+  const scores={};
+  for(let i=1;i<=16;i++){
+    const el=document.querySelector(`input[name="q${i}"]:checked`);
+    scores[i]=el?parseInt(el.value):0;
+  }
+  const totals={};
+  Object.entries(mapping).forEach(([key,qs])=>{
+    totals[key]=qs.reduce((s,q)=>s+scores[q],0);
+  });
+  const answered=Object.values(scores).filter(v=>v>0).length;
+  if(answered<16){
+    alert(`아직 ${16-answered}개 문항이 남았습니다.`);return;
+  }
+  showResult(totals);
+}
+
+function showResult(totals){
+  const grid=document.getElementById('scoreGrid');
+  const labels={A:"성향 A (지시형)",B:"성향 B (위임형)",C:"성향 C (참여형)",D:"성향 D (온정형)"};
+  const colors={A:"#1A9E75",B:"#D85A30",C:"#555",D:"#2BAB7A"};
+  grid.innerHTML='';
+  Object.keys(totals).forEach(k=>{
+    const card=document.createElement('div');
+    card.className='score-card';
+    card.innerHTML=`<div class="score-label">${labels[k]}</div><div class="score-val" style="color:${colors[k]}">${totals[k]}<span style="font-size:14px;font-weight:400">점</span></div>`;
+    grid.appendChild(card);
+  });
+
+  drawDiamond(totals);
+
+  const best=Object.entries(totals).sort((a,b)=>b[1]-a[1])[0][0];
+  const t=types[best];
+  const tc=document.getElementById('typeCard');
+  tc.style.background=t.light;
+  tc.style.borderColor=t.color+'44';
+  tc.innerHTML=`<div style="font-size:12px;color:${t.color};margin-bottom:4px">최고 성향</div><div class="type-name" style="color:${t.color}">${t.name}</div><span class="type-tag" style="background:${t.color};color:#fff">${t.tag}</span><p class="type-desc">${t.desc}</p>`;
+
+  document.getElementById('result').className='result-section show';
+  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function drawDiamond(totals){
+  const svg=document.getElementById('diamondG');
+  const cx=150,cy=150,max=20,scale=120;
+  svg.innerHTML='';
+
+  [5,10,15,20].forEach(v=>{
+    const s=(v/max)*scale;
+    const pts=`${cx},${cy-s} ${cx+s},${cy} ${cx},${cy+s} ${cx-s},${cy}`;
+    const poly=document.createElementNS('http://www.w3.org/2000/svg','polygon');
+    poly.setAttribute('points',pts);
+    poly.setAttribute('fill','none');
+    poly.setAttribute('stroke','#ccc');
+    poly.setAttribute('stroke-width','0.5');
+    svg.appendChild(poly);
+    if(v<20){
+      const lbl=document.createElementNS('http://www.w3.org/2000/svg','text');
+      lbl.setAttribute('x',cx+3);lbl.setAttribute('y',cy-s+4);
+      lbl.setAttribute('font-size','9');lbl.setAttribute('fill','#999');
+      lbl.textContent=v;svg.appendChild(lbl);
+    }
+  });
+
+  const axes=[{k:'A',dx:0,dy:-1,lx:cx,ly:cy-scale-16,lbl:'성향 A',c:'#1A9E75'},{k:'B',dx:-1,dy:0,lx:cx-scale-30,ly:cy+4,lbl:'성향 B',c:'#D85A30'},{k:'C',dx:1,dy:0,lx:cx+scale+6,ly:cy+4,lbl:'성향 C',c:'#555'},{k:'D',dx:0,dy:1,lx:cx,ly:cy+scale+18,lbl:'성향 D',c:'#2BAB7A'}];
+  axes.forEach(ax=>{
+    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1',cx);line.setAttribute('y1',cy);
+    line.setAttribute('x2',cx+ax.dx*scale);line.setAttribute('y2',cy+ax.dy*scale);
+    line.setAttribute('stroke','#bbb');line.setAttribute('stroke-width','0.5');line.setAttribute('stroke-dasharray','4,3');
+    svg.appendChild(line);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',ax.lx);t.setAttribute('y',ax.ly);
+    t.setAttribute('text-anchor','middle');t.setAttribute('font-size','11');t.setAttribute('font-weight','500');t.setAttribute('fill',ax.c);
+    t.textContent=ax.lbl;svg.appendChild(t);
+  });
+
+  const vals={A:totals.A,B:totals.B,C:totals.C,D:totals.D};
+  const aY=cy-(vals.A/max)*scale, bX=cx-(vals.B/max)*scale, cX=cx+(vals.C/max)*scale, dY=cy+(vals.D/max)*scale;
+  const poly=document.createElementNS('http://www.w3.org/2000/svg','polygon');
+  poly.setAttribute('points',`${cx},${aY} ${cX},${cy} ${cx},${dY} ${bX},${cy}`);
+  poly.setAttribute('fill','#2BAB7A44');poly.setAttribute('stroke','#2BAB7A');poly.setAttribute('stroke-width','1.5');
+  svg.appendChild(poly);
+}
+
+function resetAll(){
+  document.querySelectorAll('input[type=radio]').forEach(r=>r.checked=false);
+  document.getElementById('result').className='result-section';
+  document.getElementById('progress').textContent='0 / 16 응답';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
