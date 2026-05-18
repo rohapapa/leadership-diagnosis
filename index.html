@@ -1,63 +1,85 @@
-
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>리더십 유형 진단</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-.wrap{max-width:480px;margin:0 auto;padding:1.5rem 1rem;font-family:var(--font-sans)}
-.prog-bar-bg{height:6px;background:var(--color-background-secondary);border-radius:999px;margin-bottom:.5rem}
-.prog-bar-fill{height:6px;background:#2BAB7A;border-radius:999px;transition:width .3s}
-.prog-text{font-size:12px;color:var(--color-text-secondary);text-align:right;margin-bottom:2rem}
-.q-card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.75rem 1.25rem;min-height:160px;display:flex;align-items:center;justify-content:center;margin-bottom:1.75rem}
-.q-text{font-size:17px;line-height:1.7;color:var(--color-text-primary);text-align:center;font-weight:400}
-.q-num-label{font-size:13px;color:#2BAB7A;font-weight:500;text-align:center;margin-bottom:.75rem}
-.score-btns{display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem}
-.score-btn{display:flex;align-items:center;gap:14px;padding:.9rem 1.25rem;border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);cursor:pointer;font-size:15px;color:var(--color-text-primary);transition:all .15s;text-align:left}
-.score-btn:hover{border-color:#2BAB7A;background:#E1F5EE}
-.score-btn.selected{border-color:#2BAB7A;background:#E1F5EE;font-weight:500}
-.score-circle{width:32px;height:32px;border-radius:50%;background:#2BAB7A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;flex-shrink:0}
-.nav-row{display:flex;gap:10px}
-.btn-prev{flex:1;padding:.75rem;background:transparent;border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:15px;color:var(--color-text-secondary);cursor:pointer}
-.btn-prev:hover{background:var(--color-background-secondary)}
-.btn-next{flex:2;padding:.75rem;background:#2BAB7A;color:#fff;border:none;border-radius:var(--border-radius-md);font-size:15px;font-weight:500;cursor:pointer}
-.btn-next:hover{background:#239066}
+html,body{height:100%;background:#fff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Apple SD Gothic Neo','Pretendard',sans-serif}
+.screen{min-height:100vh;display:flex;flex-direction:column}
+
+/* 인트로 */
+.intro{display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:100vh;padding:2.5rem 1.75rem;text-align:center}
+.intro h1{font-size:28px;font-weight:600;color:#2BAB7A;margin-bottom:.75rem}
+.intro p{font-size:17px;color:#666;line-height:1.8;margin-bottom:2.5rem}
+.stat-row{display:flex;justify-content:center;gap:2.5rem;margin-bottom:3rem}
+.stat-item .num{font-size:28px;font-weight:600;color:#2BAB7A}
+.stat-item .lbl{font-size:14px;color:#888;margin-top:2px}
+.btn-start{width:100%;max-width:360px;padding:1.1rem;background:#2BAB7A;color:#fff;border:none;border-radius:12px;font-size:18px;font-weight:600;cursor:pointer}
+.btn-start:active{background:#1d8f65}
+
+/* 진단 */
+.diag{display:none;flex-direction:column;min-height:100vh;padding:1.5rem 1.5rem 2rem}
+.prog-wrap{margin-bottom:1.25rem}
+.prog-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem}
+.prog-label{font-size:15px;color:#2BAB7A;font-weight:600}
+.prog-count{font-size:15px;color:#888}
+.prog-bar-bg{height:8px;background:#f0f0f0;border-radius:999px}
+.prog-bar-fill{height:8px;background:#2BAB7A;border-radius:999px;transition:width .35s}
+.q-card{flex:1;background:#f7f9f8;border-radius:16px;padding:2rem 1.5rem;display:flex;align-items:center;justify-content:center;margin:1rem 0 1.5rem;min-height:180px}
+.q-text{font-size:20px;line-height:1.75;color:#1a1a1a;text-align:center;font-weight:400;word-break:keep-all}
+.score-btns{display:flex;flex-direction:column;gap:12px;margin-bottom:1.5rem}
+.score-btn{display:flex;align-items:center;gap:16px;padding:1rem 1.25rem;border:1px solid #ddd;border-radius:12px;background:#fff;cursor:pointer;font-size:17px;color:#1a1a1a;text-align:left;transition:all .12s}
+.score-btn:active{transform:scale(0.98)}
+.score-btn.selected{border-color:#2BAB7A;background:#E1F5EE;font-weight:600}
+.score-circle{width:38px;height:38px;border-radius:50%;background:#2BAB7A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;flex-shrink:0}
+.nav-row{display:flex;gap:12px}
+.btn-prev{flex:1;padding:.9rem;background:#fff;border:1px solid #ddd;border-radius:12px;font-size:17px;color:#888;cursor:pointer}
+.btn-next{flex:2;padding:.9rem;background:#2BAB7A;color:#fff;border:none;border-radius:12px;font-size:17px;font-weight:600;cursor:pointer}
 .btn-next:disabled{background:#ccc;cursor:not-allowed}
-.result-wrap{display:none}
-.result-wrap.show{display:block}
-.type-hero{text-align:center;padding:2rem 1rem 1.5rem;border-radius:var(--border-radius-lg);margin-bottom:1.25rem}
-.type-badge{display:inline-block;font-size:12px;padding:3px 14px;border-radius:999px;color:#fff;margin-bottom:.75rem}
-.type-title{font-size:26px;font-weight:500;margin-bottom:.5rem}
-.type-tag{font-size:16px;margin-bottom:1rem}
-.type-desc{font-size:14px;line-height:1.7;color:var(--color-text-secondary)}
-.score-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.5rem}
-.sc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem;text-align:center}
-.sc-label{font-size:11px;color:var(--color-text-secondary);margin-bottom:2px}
-.sc-val{font-size:22px;font-weight:500}
+.btn-next:active:not(:disabled){background:#1d8f65}
+
+/* 결과 */
+.result{display:none;flex-direction:column;min-height:100vh;padding:2rem 1.5rem}
+.result.show{display:flex}
+.type-hero{text-align:center;padding:2.25rem 1.5rem;border-radius:16px;margin-bottom:1.25rem}
+.type-badge{display:inline-block;font-size:13px;padding:4px 16px;border-radius:999px;color:#fff;margin-bottom:.75rem}
+.type-title{font-size:30px;font-weight:700;margin-bottom:.5rem}
+.type-tag-txt{font-size:18px;margin-bottom:1rem}
+.type-desc{font-size:15px;line-height:1.75;color:#555;word-break:keep-all}
+.score-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.5rem}
+.sc{background:#f7f9f8;border-radius:12px;padding:1rem;text-align:center}
+.sc-label{font-size:13px;color:#888;margin-bottom:4px}
+.sc-val{font-size:26px;font-weight:600}
 svg.dmd{display:block;margin:0 auto 1.5rem;overflow:visible}
-.btn-retry{width:100%;padding:.75rem;background:transparent;border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:15px;color:var(--color-text-secondary);cursor:pointer;margin-top:.5rem}
-.btn-retry:hover{background:var(--color-background-secondary)}
-.intro-wrap{text-align:center;padding:1rem 0}
-.intro-wrap h1{font-size:22px;font-weight:500;color:#2BAB7A;margin-bottom:.5rem}
-.intro-wrap p{font-size:14px;color:var(--color-text-secondary);line-height:1.7;margin-bottom:2rem}
-.btn-start{width:100%;padding:.85rem;background:#2BAB7A;color:#fff;border:none;border-radius:var(--border-radius-md);font-size:16px;font-weight:500;cursor:pointer}
-.btn-start:hover{background:#239066}
+.btn-retry{width:100%;padding:.9rem;background:#fff;border:1px solid #ddd;border-radius:12px;font-size:17px;color:#888;cursor:pointer;margin-top:.5rem}
 </style>
+</head>
+<body>
+<div class="screen">
 
-<div class="wrap">
-  <h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden">리더십 유형 진단 — 한 문항씩 응답하는 모바일 친화형</h2>
-
-  <div class="intro-wrap" id="intro">
+  <!-- 인트로 -->
+  <div class="intro" id="intro">
     <h1>리더십 유형 진단</h1>
-    <p>총 16개 문항에 답하면<br>나의 리더십 유형을 알 수 있어요.<br>각 문항에 솔직하게 응답해 주세요.</p>
-    <div style="display:flex;justify-content:center;gap:1.5rem;margin-bottom:2rem">
-      <div style="text-align:center"><div style="font-size:22px;font-weight:500;color:#2BAB7A">16</div><div style="font-size:12px;color:var(--color-text-secondary)">문항</div></div>
-      <div style="text-align:center"><div style="font-size:22px;font-weight:500;color:#2BAB7A">3분</div><div style="font-size:12px;color:var(--color-text-secondary)">소요</div></div>
-      <div style="text-align:center"><div style="font-size:22px;font-weight:500;color:#2BAB7A">4가지</div><div style="font-size:12px;color:var(--color-text-secondary)">유형</div></div>
+    <p>총 16개 문항에 답하면<br>나의 리더십 유형을 알 수 있어요.</p>
+    <div class="stat-row">
+      <div class="stat-item"><div class="num">16</div><div class="lbl">문항</div></div>
+      <div class="stat-item"><div class="num">3분</div><div class="lbl">소요</div></div>
+      <div class="stat-item"><div class="num">4가지</div><div class="lbl">유형</div></div>
     </div>
     <button class="btn-start" onclick="startDiag()">진단 시작하기 →</button>
   </div>
 
-  <div id="diag" style="display:none">
-    <div class="prog-bar-bg"><div class="prog-bar-fill" id="progFill" style="width:0%"></div></div>
-    <div class="prog-text" id="progText">1 / 16</div>
-    <div class="q-num-label" id="qNumLabel">문항 1</div>
+  <!-- 진단 -->
+  <div class="diag" id="diag">
+    <div class="prog-wrap">
+      <div class="prog-top">
+        <span class="prog-label" id="qNumLabel">문항 1</span>
+        <span class="prog-count" id="progText">1 / 16</span>
+      </div>
+      <div class="prog-bar-bg"><div class="prog-bar-fill" id="progFill" style="width:6.25%"></div></div>
+    </div>
     <div class="q-card"><p class="q-text" id="qText"></p></div>
     <div class="score-btns" id="scoreBtns"></div>
     <div class="nav-row">
@@ -66,12 +88,14 @@ svg.dmd{display:block;margin:0 auto 1.5rem;overflow:visible}
     </div>
   </div>
 
-  <div class="result-wrap" id="result">
+  <!-- 결과 -->
+  <div class="result" id="result">
     <div class="type-hero" id="typeHero"></div>
     <div class="score-row" id="scoreRow"></div>
-    <svg class="dmd" id="dmdSvg" viewBox="0 0 260 260" width="220" height="220" role="img" aria-label="리더십 유형 다이아몬드 차트"><g id="dmdG"></g></svg>
+    <svg class="dmd" viewBox="0 0 260 260" width="200" height="200" role="img" aria-label="리더십 유형 다이아몬드 차트"><g id="dmdG"></g></svg>
     <button class="btn-retry" onclick="reset()">다시 진단하기</button>
   </div>
+
 </div>
 
 <script>
@@ -94,14 +118,19 @@ const qs=[
   "직원들에게 의욕과 자신감을 갖도록 하는 것이 리더에게 특히 중요하다."
 ];
 const mapping={A:[2,7,9,15],B:[4,5,13,14],C:[1,8,12,16],D:[3,6,10,11]};
-const labels=[["5점","매우 그렇다"],["4점","그런 편이다"],["3점","보통이다"],["2점","별로 아니다"],["1점","전혀 아니다"]];
-const types={A:{name:"지시형",tag:"나를 따르라!",color:"#1A9E75",light:"#E1F5EE",desc:"명확한 방향 제시와 과업 중심 리더십을 발휘합니다. 구성원에게 역할과 책임을 분명히 부여하고 성과 기준을 높게 유지합니다. 빠른 의사결정과 실행력이 강점입니다."},B:{name:"위임형",tag:"니들이 고생이 많다",color:"#D85A30",light:"#FAECE7",desc:"구성원의 자율성을 존중하고 권한을 적극적으로 위임합니다. 간섭을 최소화하며 결과보다 과정을 믿는 스타일입니다. 성숙한 팀에서 높은 성과를 이끌어냅니다."},C:{name:"참여형",tag:"네 마음을 보여줘",color:"#555",light:"#F1EFE8",desc:"구성원의 의견을 적극적으로 수렴하고 공동의사결정을 중시합니다. 갈등을 창의적 해결의 기회로 봅니다. 다양성과 협업을 통해 혁신을 이끄는 스타일입니다."},D:{name:"온정형",tag:"우리가 남이가",color:"#2BAB7A",light:"#E1F5EE",desc:"관계와 배려를 중심에 두는 리더십입니다. 구성원 개개인의 감정과 상황에 공감하며 팀의 화합을 이끕니다. 신뢰를 기반으로 장기적 충성도를 형성합니다."}};
+const lbls=[["5","매우 그렇다"],["4","그런 편이다"],["3","보통이다"],["2","별로 아니다"],["1","전혀 아니다"]];
+const types={
+  A:{name:"지시형",tag:"나를 따르라!",color:"#1A9E75",light:"#E1F5EE",desc:"명확한 방향 제시와 과업 중심 리더십을 발휘합니다. 구성원에게 역할과 책임을 분명히 부여하고 성과 기준을 높게 유지합니다. 빠른 의사결정과 실행력이 강점입니다."},
+  B:{name:"위임형",tag:"니들이 고생이 많다",color:"#D85A30",light:"#FAECE7",desc:"구성원의 자율성을 존중하고 권한을 적극적으로 위임합니다. 간섭을 최소화하며 결과보다 과정을 믿는 스타일입니다. 성숙한 팀에서 높은 성과를 이끌어냅니다."},
+  C:{name:"참여형",tag:"네 마음을 보여줘",color:"#555",light:"#F1EFE8",desc:"구성원의 의견을 적극적으로 수렴하고 공동의사결정을 중시합니다. 갈등을 창의적 해결의 기회로 봅니다. 다양성과 협업을 통해 혁신을 이끄는 스타일입니다."},
+  D:{name:"온정형",tag:"우리가 남이가",color:"#2BAB7A",light:"#E1F5EE",desc:"관계와 배려를 중심에 두는 리더십입니다. 구성원 개개인의 감정과 상황에 공감하며 팀의 화합을 이끕니다. 신뢰를 기반으로 장기적 충성도를 형성합니다."}
+};
 
 let cur=0,answers=new Array(16).fill(0);
 
 function startDiag(){
   document.getElementById('intro').style.display='none';
-  document.getElementById('diag').style.display='block';
+  document.getElementById('diag').style.display='flex';
   renderQ();
 }
 
@@ -111,22 +140,21 @@ function renderQ(){
   document.getElementById('progText').textContent=(i+1)+' / 16';
   document.getElementById('qNumLabel').textContent='문항 '+(i+1);
   document.getElementById('qText').textContent=qs[i];
-  document.getElementById('btnPrev').style.display=i===0?'none':'block';
-  const btn=document.getElementById('btnNext');
-  btn.textContent=i===15?'결과 보기 →':'다음 →';
-  const container=document.getElementById('scoreBtns');
-  container.innerHTML='';
+  document.getElementById('btnPrev').style.visibility=i===0?'hidden':'visible';
+  document.getElementById('btnNext').textContent=i===15?'결과 보기 →':'다음 →';
+  document.getElementById('btnNext').disabled=answers[i]===0;
+  const c=document.getElementById('scoreBtns');
+  c.innerHTML='';
   [5,4,3,2,1].forEach((v,idx)=>{
     const b=document.createElement('button');
     b.className='score-btn'+(answers[i]===v?' selected':'');
-    b.innerHTML=`<div class="score-circle">${v}</div><span>${labels[idx][1]}</span>`;
-    b.onclick=()=>selectScore(v);
-    container.appendChild(b);
+    b.innerHTML=`<div class="score-circle">${v}</div><span>${lbls[idx][1]}</span>`;
+    b.onclick=()=>select(v);
+    c.appendChild(b);
   });
-  document.getElementById('btnNext').disabled=answers[i]===0;
 }
 
-function selectScore(v){
+function select(v){
   answers[cur]=v;
   document.querySelectorAll('.score-btn').forEach((b,idx)=>{
     b.className='score-btn'+([5,4,3,2,1][idx]===v?' selected':'');
@@ -135,7 +163,7 @@ function selectScore(v){
 }
 
 function nextQ(){
-  if(answers[cur]===0)return;
+  if(!answers[cur])return;
   if(cur===15){showResult();return;}
   cur++;renderQ();
 }
@@ -150,47 +178,48 @@ function showResult(){
   const t=types[best];
   const hero=document.getElementById('typeHero');
   hero.style.background=t.light;
-  hero.innerHTML=`<span class="type-badge" style="background:${t.color}">최고 성향</span><div class="type-title" style="color:${t.color}">${t.name}</div><div class="type-tag" style="color:${t.color}">"${t.tag}"</div><p class="type-desc">${t.desc}</p>`;
+  hero.innerHTML=`<span class="type-badge" style="background:${t.color}">나의 리더십 유형</span><div class="type-title" style="color:${t.color}">${t.name}</div><div class="type-tag-txt" style="color:${t.color}">"${t.tag}"</div><p class="type-desc">${t.desc}</p>`;
   const row=document.getElementById('scoreRow');
   const clrs={A:'#1A9E75',B:'#D85A30',C:'#555',D:'#2BAB7A'};
   const nms={A:'지시형',B:'위임형',C:'참여형',D:'온정형'};
   row.innerHTML='';
   Object.keys(scores).forEach(k=>{
     const d=document.createElement('div');d.className='sc';
-    d.innerHTML=`<div class="sc-label">성향 ${k} (${nms[k]})</div><div class="sc-val" style="color:${clrs[k]}">${scores[k]}<span style="font-size:13px;font-weight:400">점</span></div>`;
+    d.innerHTML=`<div class="sc-label">성향 ${k} · ${nms[k]}</div><div class="sc-val" style="color:${clrs[k]}">${scores[k]}<span style="font-size:14px;font-weight:400">점</span></div>`;
     row.appendChild(d);
   });
   drawDmd(scores);
-  document.getElementById('result').className='result-wrap show';
+  document.getElementById('result').className='result show';
 }
 
 function drawDmd(totals){
   const g=document.getElementById('dmdG');g.innerHTML='';
-  const cx=130,cy=130,max=20,sc=100;
+  const cx=130,cy=130,max=20,sc=95;
   [5,10,15,20].forEach(v=>{
     const s=(v/max)*sc;
     const p=document.createElementNS('http://www.w3.org/2000/svg','polygon');
     p.setAttribute('points',`${cx},${cy-s} ${cx+s},${cy} ${cx},${cy+s} ${cx-s},${cy}`);
-    p.setAttribute('fill','none');p.setAttribute('stroke','#ccc');p.setAttribute('stroke-width','0.5');
+    p.setAttribute('fill','none');p.setAttribute('stroke','#ddd');p.setAttribute('stroke-width','0.5');
     g.appendChild(p);
-    if(v<20){const l=document.createElementNS('http://www.w3.org/2000/svg','text');l.setAttribute('x',cx+2);l.setAttribute('y',cy-s+4);l.setAttribute('font-size','8');l.setAttribute('fill','#aaa');l.textContent=v;g.appendChild(l);}
+    if(v<20){const l=document.createElementNS('http://www.w3.org/2000/svg','text');l.setAttribute('x',cx+2);l.setAttribute('y',cy-s+4);l.setAttribute('font-size','8');l.setAttribute('fill','#bbb');l.textContent=v;g.appendChild(l);}
   });
-  [{k:'A',lx:cx,ly:cy-sc-12,lbl:'성향 A',c:'#1A9E75'},{k:'B',lx:cx-sc-28,ly:cy+4,lbl:'성향 B',c:'#D85A30'},{k:'C',lx:cx+sc+8,ly:cy+4,lbl:'성향 C',c:'#555'},{k:'D',lx:cx,ly:cy+sc+16,lbl:'성향 D',c:'#2BAB7A'}].forEach(ax=>{
+  [{k:'A',lx:cx,ly:cy-sc-12,lbl:'성향 A',c:'#1A9E75'},{k:'B',lx:cx-sc-30,ly:cy+4,lbl:'성향 B',c:'#D85A30'},{k:'C',lx:cx+sc+8,ly:cy+4,lbl:'성향 C',c:'#555'},{k:'D',lx:cx,ly:cy+sc+16,lbl:'성향 D',c:'#2BAB7A'}].forEach(ax=>{
     const t=document.createElementNS('http://www.w3.org/2000/svg','text');
-    t.setAttribute('x',ax.lx);t.setAttribute('y',ax.ly);t.setAttribute('text-anchor','middle');t.setAttribute('font-size','10');t.setAttribute('font-weight','500');t.setAttribute('fill',ax.c);
+    t.setAttribute('x',ax.lx);t.setAttribute('y',ax.ly);t.setAttribute('text-anchor','middle');t.setAttribute('font-size','11');t.setAttribute('font-weight','600');t.setAttribute('fill',ax.c);
     t.textContent=ax.lbl;g.appendChild(t);
   });
   const aY=cy-(totals.A/max)*sc,bX=cx-(totals.B/max)*sc,cX=cx+(totals.C/max)*sc,dY=cy+(totals.D/max)*sc;
   const poly=document.createElementNS('http://www.w3.org/2000/svg','polygon');
   poly.setAttribute('points',`${cx},${aY} ${cX},${cy} ${cx},${dY} ${bX},${cy}`);
-  poly.setAttribute('fill','#2BAB7A33');poly.setAttribute('stroke','#2BAB7A');poly.setAttribute('stroke-width','1.5');
+  poly.setAttribute('fill','#2BAB7A33');poly.setAttribute('stroke','#2BAB7A');poly.setAttribute('stroke-width','2');
   g.appendChild(poly);
 }
 
 function reset(){
   cur=0;answers=new Array(16).fill(0);
-  document.getElementById('result').className='result-wrap';
-  document.getElementById('diag').style.display='none';
-  document.getElementById('intro').style.display='block';
+  document.getElementById('result').className='result';
+  document.getElementById('intro').style.display='flex';
 }
 </script>
+</body>
+</html>
