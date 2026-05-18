@@ -1,65 +1,77 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--font-sans)}
-.wrap{max-width:680px;margin:0 auto;padding:1.5rem 1rem}
-h1{font-size:22px;font-weight:500;color:#2BAB7A;margin-bottom:.25rem}
-.subtitle{font-size:14px;color:var(--color-text-secondary);margin-bottom:1.5rem}
-.scale-bar{display:flex;gap:4px;margin-bottom:1.5rem;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem 1rem}
-.scale-item{flex:1;text-align:center;font-size:11px;color:var(--color-text-secondary)}
-.scale-item span{display:block;font-size:13px;font-weight:500;color:var(--color-text-primary)}
-.q-list{display:flex;flex-direction:column;gap:0}
-.q-row{display:grid;grid-template-columns:1fr 5fr repeat(5,1fr);align-items:center;border-bottom:.5px solid var(--color-border-tertiary);padding:.6rem 0;gap:8px}
-.q-row:first-child{background:var(--color-background-secondary);border-radius:var(--border-radius-md) var(--border-radius-md) 0 0;font-size:12px;font-weight:500;color:var(--color-text-secondary);padding:.5rem .5rem}
-.q-num{font-size:13px;font-weight:500;color:var(--color-text-secondary);text-align:center}
-.q-text{font-size:13px;color:var(--color-text-primary);line-height:1.5}
-.radio-cell{display:flex;justify-content:center}
-input[type=radio]{width:18px;height:18px;cursor:pointer;accent-color:#2BAB7A}
-.result-section{margin-top:2rem;display:none}
-.result-section.show{display:block}
-.score-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.5rem}
-.score-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem 1rem;text-align:center}
-.score-label{font-size:12px;color:var(--color-text-secondary)}
-.score-val{font-size:24px;font-weight:500}
-.type-card{border-radius:var(--border-radius-lg);padding:1.25rem 1.5rem;margin-bottom:1rem;border:.5px solid var(--color-border-tertiary)}
-.type-name{font-size:18px;font-weight:500;margin-bottom:.25rem}
-.type-tag{font-size:12px;margin-bottom:.75rem;display:inline-block;padding:2px 10px;border-radius:999px}
-.type-desc{font-size:14px;color:var(--color-text-secondary);line-height:1.6}
-.btn{display:block;width:100%;padding:.75rem;background:#2BAB7A;color:#fff;border:none;border-radius:var(--border-radius-md);font-size:15px;font-weight:500;cursor:pointer;margin-top:1rem}
-.btn:hover{background:#239066}
-.btn-reset{background:transparent;color:var(--color-text-secondary);border:.5px solid var(--color-border-secondary);margin-top:.75rem}
-.btn-reset:hover{background:var(--color-background-secondary);color:var(--color-text-primary)}
-svg.diamond{overflow:visible}
-.progress{font-size:13px;color:var(--color-text-secondary);margin-top:.5rem;text-align:right}
+.wrap{max-width:480px;margin:0 auto;padding:1.5rem 1rem;font-family:var(--font-sans)}
+.prog-bar-bg{height:6px;background:var(--color-background-secondary);border-radius:999px;margin-bottom:.5rem}
+.prog-bar-fill{height:6px;background:#2BAB7A;border-radius:999px;transition:width .3s}
+.prog-text{font-size:12px;color:var(--color-text-secondary);text-align:right;margin-bottom:2rem}
+.q-card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.75rem 1.25rem;min-height:160px;display:flex;align-items:center;justify-content:center;margin-bottom:1.75rem}
+.q-text{font-size:17px;line-height:1.7;color:var(--color-text-primary);text-align:center;font-weight:400}
+.q-num-label{font-size:13px;color:#2BAB7A;font-weight:500;text-align:center;margin-bottom:.75rem}
+.score-btns{display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem}
+.score-btn{display:flex;align-items:center;gap:14px;padding:.9rem 1.25rem;border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);cursor:pointer;font-size:15px;color:var(--color-text-primary);transition:all .15s;text-align:left}
+.score-btn:hover{border-color:#2BAB7A;background:#E1F5EE}
+.score-btn.selected{border-color:#2BAB7A;background:#E1F5EE;font-weight:500}
+.score-circle{width:32px;height:32px;border-radius:50%;background:#2BAB7A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;flex-shrink:0}
+.nav-row{display:flex;gap:10px}
+.btn-prev{flex:1;padding:.75rem;background:transparent;border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:15px;color:var(--color-text-secondary);cursor:pointer}
+.btn-prev:hover{background:var(--color-background-secondary)}
+.btn-next{flex:2;padding:.75rem;background:#2BAB7A;color:#fff;border:none;border-radius:var(--border-radius-md);font-size:15px;font-weight:500;cursor:pointer}
+.btn-next:hover{background:#239066}
+.btn-next:disabled{background:#ccc;cursor:not-allowed}
+.result-wrap{display:none}
+.result-wrap.show{display:block}
+.type-hero{text-align:center;padding:2rem 1rem 1.5rem;border-radius:var(--border-radius-lg);margin-bottom:1.25rem}
+.type-badge{display:inline-block;font-size:12px;padding:3px 14px;border-radius:999px;color:#fff;margin-bottom:.75rem}
+.type-title{font-size:26px;font-weight:500;margin-bottom:.5rem}
+.type-tag{font-size:16px;margin-bottom:1rem}
+.type-desc{font-size:14px;line-height:1.7;color:var(--color-text-secondary)}
+.score-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.5rem}
+.sc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem;text-align:center}
+.sc-label{font-size:11px;color:var(--color-text-secondary);margin-bottom:2px}
+.sc-val{font-size:22px;font-weight:500}
+svg.dmd{display:block;margin:0 auto 1.5rem;overflow:visible}
+.btn-retry{width:100%;padding:.75rem;background:transparent;border:.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:15px;color:var(--color-text-secondary);cursor:pointer;margin-top:.5rem}
+.btn-retry:hover{background:var(--color-background-secondary)}
+.intro-wrap{text-align:center;padding:1rem 0}
+.intro-wrap h1{font-size:22px;font-weight:500;color:#2BAB7A;margin-bottom:.5rem}
+.intro-wrap p{font-size:14px;color:var(--color-text-secondary);line-height:1.7;margin-bottom:2rem}
+.btn-start{width:100%;padding:.85rem;background:#2BAB7A;color:#fff;border:none;border-radius:var(--border-radius-md);font-size:16px;font-weight:500;cursor:pointer}
+.btn-start:hover{background:#239066}
 </style>
 
 <div class="wrap">
-<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden">리더십 유형 진단 도구 — 16개 문항에 응답하면 지시형, 위임형, 참여형, 온정형 중 유형을 알 수 있습니다.</h2>
-<h1>리더십 유형 진단</h1>
-<p class="subtitle">각 문항에 해당하는 점수를 선택해 주세요.</p>
+  <h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden">리더십 유형 진단 — 한 문항씩 응답하는 모바일 친화형</h2>
 
-<div class="scale-bar">
-  <div class="scale-item"><span>5점</span>매우 그렇다</div>
-  <div class="scale-item"><span>4점</span>그런 편이다</div>
-  <div class="scale-item"><span>3점</span>보통이다</div>
-  <div class="scale-item"><span>2점</span>별로 아니다</div>
-  <div class="scale-item"><span>1점</span>전혀 아니다</div>
-</div>
+  <div class="intro-wrap" id="intro">
+    <h1>리더십 유형 진단</h1>
+    <p>총 16개 문항에 답하면<br>나의 리더십 유형을 알 수 있어요.<br>각 문항에 솔직하게 응답해 주세요.</p>
+    <div style="display:flex;justify-content:center;gap:1.5rem;margin-bottom:2rem">
+      <div style="text-align:center"><div style="font-size:22px;font-weight:500;color:#2BAB7A">16</div><div style="font-size:12px;color:var(--color-text-secondary)">문항</div></div>
+      <div style="text-align:center"><div style="font-size:22px;font-weight:500;color:#2BAB7A">3분</div><div style="font-size:12px;color:var(--color-text-secondary)">소요</div></div>
+      <div style="text-align:center"><div style="font-size:22px;font-weight:500;color:#2BAB7A">4가지</div><div style="font-size:12px;color:var(--color-text-secondary)">유형</div></div>
+    </div>
+    <button class="btn-start" onclick="startDiag()">진단 시작하기 →</button>
+  </div>
 
-<div class="q-list" id="qlist"></div>
-<p class="progress" id="progress">0 / 16 응답</p>
+  <div id="diag" style="display:none">
+    <div class="prog-bar-bg"><div class="prog-bar-fill" id="progFill" style="width:0%"></div></div>
+    <div class="prog-text" id="progText">1 / 16</div>
+    <div class="q-num-label" id="qNumLabel">문항 1</div>
+    <div class="q-card"><p class="q-text" id="qText"></p></div>
+    <div class="score-btns" id="scoreBtns"></div>
+    <div class="nav-row">
+      <button class="btn-prev" id="btnPrev" onclick="prevQ()">← 이전</button>
+      <button class="btn-next" id="btnNext" onclick="nextQ()" disabled>다음 →</button>
+    </div>
+  </div>
 
-<button class="btn" onclick="calcResult()">진단 결과 보기 →</button>
-
-<div class="result-section" id="result">
-  <div class="score-grid" id="scoreGrid"></div>
-  <svg class="diamond" id="diamondSvg" viewBox="0 0 300 300" width="300" height="300" style="display:block;margin:0 auto 1.5rem" role="img" aria-label="리더십 유형 다이아몬드 차트">
-    <title>리더십 유형 다이아몬드 차트</title>
-    <g id="diamondG"></g>
-  </svg>
-  <div class="type-card" id="typeCard"></div>
-  <button class="btn btn-reset" onclick="resetAll()">다시 진단하기</button>
-</div>
+  <div class="result-wrap" id="result">
+    <div class="type-hero" id="typeHero"></div>
+    <div class="score-row" id="scoreRow"></div>
+    <svg class="dmd" id="dmdSvg" viewBox="0 0 260 260" width="220" height="220" role="img" aria-label="리더십 유형 다이아몬드 차트"><g id="dmdG"></g></svg>
+    <button class="btn-retry" onclick="reset()">다시 진단하기</button>
+  </div>
 </div>
 
 <script>
@@ -78,133 +90,107 @@ const qs=[
   "의견 대립은 새로운 해결책을 만들기 위해 필요한 것이다.",
   "팀 내 인간관계의 분쟁에 말려드는 것은 가능한 한 피하려고 한다.",
   "상대의 의견을 인정하고 최대한 채택해주는 것이 동기부여가 가장 많이 된다.",
-  "리더는 알보이지 않도록 직원들보다 능력이 뛰어난 것이 바람직하다.",
+  "리더는 얕보이지 않도록 직원들보다 능력이 뛰어난 것이 바람직하다.",
   "직원들에게 의욕과 자신감을 갖도록 하는 것이 리더에게 특히 중요하다."
 ];
-
 const mapping={A:[2,7,9,15],B:[4,5,13,14],C:[1,8,12,16],D:[3,6,10,11]};
+const labels=[["5점","매우 그렇다"],["4점","그런 편이다"],["3점","보통이다"],["2점","별로 아니다"],["1점","전혀 아니다"]];
+const types={A:{name:"지시형",tag:"나를 따르라!",color:"#1A9E75",light:"#E1F5EE",desc:"명확한 방향 제시와 과업 중심 리더십을 발휘합니다. 구성원에게 역할과 책임을 분명히 부여하고 성과 기준을 높게 유지합니다. 빠른 의사결정과 실행력이 강점입니다."},B:{name:"위임형",tag:"니들이 고생이 많다",color:"#D85A30",light:"#FAECE7",desc:"구성원의 자율성을 존중하고 권한을 적극적으로 위임합니다. 간섭을 최소화하며 결과보다 과정을 믿는 스타일입니다. 성숙한 팀에서 높은 성과를 이끌어냅니다."},C:{name:"참여형",tag:"네 마음을 보여줘",color:"#555",light:"#F1EFE8",desc:"구성원의 의견을 적극적으로 수렴하고 공동의사결정을 중시합니다. 갈등을 창의적 해결의 기회로 봅니다. 다양성과 협업을 통해 혁신을 이끄는 스타일입니다."},D:{name:"온정형",tag:"우리가 남이가",color:"#2BAB7A",light:"#E1F5EE",desc:"관계와 배려를 중심에 두는 리더십입니다. 구성원 개개인의 감정과 상황에 공감하며 팀의 화합을 이끕니다. 신뢰를 기반으로 장기적 충성도를 형성합니다."}};
 
-const types={
-  A:{name:"지시형",tag:"나를 따르라!",color:"#1A9E75",light:"#E1F5EE",desc:"명확한 방향 제시와 과업 중심 리더십을 발휘합니다. 구성원에게 역할과 책임을 분명히 부여하고, 성과 기준을 높게 유지합니다. 빠른 의사결정과 실행력이 강점입니다."},
-  B:{name:"위임형",tag:"니들이 고생이 많다",color:"#D85A30",light:"#FAECE7",desc:"구성원의 자율성을 존중하고 권한을 적극적으로 위임합니다. 간섭을 최소화하며 결과보다 과정을 믿는 스타일입니다. 성숙한 팀에서 높은 성과를 이끌어냅니다."},
-  C:{name:"참여형",tag:"네 마음을 보여줘",color:"#555",light:"#F1EFE8",desc:"구성원의 의견을 적극적으로 수렴하고 공동의사결정을 중시합니다. 갈등을 창의적 해결의 기회로 봅니다. 다양성과 협업을 통해 혁신을 이끄는 스타일입니다."},
-  D:{name:"온정형",tag:"우리가 남이가",color:"#2BAB7A",light:"#E1F5EE",desc:"관계와 배려를 중심에 두는 리더십입니다. 구성원 개개인의 감정과 상황에 공감하며 팀의 화합을 이끕니다. 신뢰를 기반으로 장기적 충성도를 형성합니다."}
-};
+let cur=0,answers=new Array(16).fill(0);
 
-const list=document.getElementById('qlist');
-const header=document.createElement('div');
-header.className='q-row';
-header.innerHTML='<div></div><div></div><div style="text-align:center">5</div><div style="text-align:center">4</div><div style="text-align:center">3</div><div style="text-align:center">2</div><div style="text-align:center">1</div>';
-list.appendChild(header);
-
-qs.forEach((q,i)=>{
-  const row=document.createElement('div');
-  row.className='q-row';
-  let radios='';
-  [5,4,3,2,1].forEach(v=>{
-    radios+=`<div class="radio-cell"><input type="radio" name="q${i+1}" value="${v}" onchange="updateProgress()"></div>`;
-  });
-  row.innerHTML=`<div class="q-num">${i+1}</div><div class="q-text">${q}</div>${radios}`;
-  list.appendChild(row);
-});
-
-function updateProgress(){
-  let count=0;
-  for(let i=1;i<=16;i++){
-    if(document.querySelector(`input[name="q${i}"]:checked`))count++;
-  }
-  document.getElementById('progress').textContent=`${count} / 16 응답`;
+function startDiag(){
+  document.getElementById('intro').style.display='none';
+  document.getElementById('diag').style.display='block';
+  renderQ();
 }
 
-function calcResult(){
+function renderQ(){
+  const i=cur;
+  document.getElementById('progFill').style.width=((i+1)/16*100)+'%';
+  document.getElementById('progText').textContent=(i+1)+' / 16';
+  document.getElementById('qNumLabel').textContent='문항 '+(i+1);
+  document.getElementById('qText').textContent=qs[i];
+  document.getElementById('btnPrev').style.display=i===0?'none':'block';
+  const btn=document.getElementById('btnNext');
+  btn.textContent=i===15?'결과 보기 →':'다음 →';
+  const container=document.getElementById('scoreBtns');
+  container.innerHTML='';
+  [5,4,3,2,1].forEach((v,idx)=>{
+    const b=document.createElement('button');
+    b.className='score-btn'+(answers[i]===v?' selected':'');
+    b.innerHTML=`<div class="score-circle">${v}</div><span>${labels[idx][1]}</span>`;
+    b.onclick=()=>selectScore(v);
+    container.appendChild(b);
+  });
+  document.getElementById('btnNext').disabled=answers[i]===0;
+}
+
+function selectScore(v){
+  answers[cur]=v;
+  document.querySelectorAll('.score-btn').forEach((b,idx)=>{
+    b.className='score-btn'+([5,4,3,2,1][idx]===v?' selected':'');
+  });
+  document.getElementById('btnNext').disabled=false;
+}
+
+function nextQ(){
+  if(answers[cur]===0)return;
+  if(cur===15){showResult();return;}
+  cur++;renderQ();
+}
+
+function prevQ(){if(cur>0){cur--;renderQ();}}
+
+function showResult(){
+  document.getElementById('diag').style.display='none';
   const scores={};
-  for(let i=1;i<=16;i++){
-    const el=document.querySelector(`input[name="q${i}"]:checked`);
-    scores[i]=el?parseInt(el.value):0;
-  }
-  const totals={};
-  Object.entries(mapping).forEach(([key,qs])=>{
-    totals[key]=qs.reduce((s,q)=>s+scores[q],0);
-  });
-  const answered=Object.values(scores).filter(v=>v>0).length;
-  if(answered<16){
-    alert(`아직 ${16-answered}개 문항이 남았습니다.`);return;
-  }
-  showResult(totals);
-}
-
-function showResult(totals){
-  const grid=document.getElementById('scoreGrid');
-  const labels={A:"성향 A (지시형)",B:"성향 B (위임형)",C:"성향 C (참여형)",D:"성향 D (온정형)"};
-  const colors={A:"#1A9E75",B:"#D85A30",C:"#555",D:"#2BAB7A"};
-  grid.innerHTML='';
-  Object.keys(totals).forEach(k=>{
-    const card=document.createElement('div');
-    card.className='score-card';
-    card.innerHTML=`<div class="score-label">${labels[k]}</div><div class="score-val" style="color:${colors[k]}">${totals[k]}<span style="font-size:14px;font-weight:400">점</span></div>`;
-    grid.appendChild(card);
-  });
-
-  drawDiamond(totals);
-
-  const best=Object.entries(totals).sort((a,b)=>b[1]-a[1])[0][0];
+  Object.entries(mapping).forEach(([k,qs])=>{scores[k]=qs.reduce((s,q)=>s+answers[q-1],0);});
+  const best=Object.entries(scores).sort((a,b)=>b[1]-a[1])[0][0];
   const t=types[best];
-  const tc=document.getElementById('typeCard');
-  tc.style.background=t.light;
-  tc.style.borderColor=t.color+'44';
-  tc.innerHTML=`<div style="font-size:12px;color:${t.color};margin-bottom:4px">최고 성향</div><div class="type-name" style="color:${t.color}">${t.name}</div><span class="type-tag" style="background:${t.color};color:#fff">${t.tag}</span><p class="type-desc">${t.desc}</p>`;
-
-  document.getElementById('result').className='result-section show';
-  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'start'});
+  const hero=document.getElementById('typeHero');
+  hero.style.background=t.light;
+  hero.innerHTML=`<span class="type-badge" style="background:${t.color}">최고 성향</span><div class="type-title" style="color:${t.color}">${t.name}</div><div class="type-tag" style="color:${t.color}">"${t.tag}"</div><p class="type-desc">${t.desc}</p>`;
+  const row=document.getElementById('scoreRow');
+  const clrs={A:'#1A9E75',B:'#D85A30',C:'#555',D:'#2BAB7A'};
+  const nms={A:'지시형',B:'위임형',C:'참여형',D:'온정형'};
+  row.innerHTML='';
+  Object.keys(scores).forEach(k=>{
+    const d=document.createElement('div');d.className='sc';
+    d.innerHTML=`<div class="sc-label">성향 ${k} (${nms[k]})</div><div class="sc-val" style="color:${clrs[k]}">${scores[k]}<span style="font-size:13px;font-weight:400">점</span></div>`;
+    row.appendChild(d);
+  });
+  drawDmd(scores);
+  document.getElementById('result').className='result-wrap show';
 }
 
-function drawDiamond(totals){
-  const svg=document.getElementById('diamondG');
-  const cx=150,cy=150,max=20,scale=120;
-  svg.innerHTML='';
-
+function drawDmd(totals){
+  const g=document.getElementById('dmdG');g.innerHTML='';
+  const cx=130,cy=130,max=20,sc=100;
   [5,10,15,20].forEach(v=>{
-    const s=(v/max)*scale;
-    const pts=`${cx},${cy-s} ${cx+s},${cy} ${cx},${cy+s} ${cx-s},${cy}`;
-    const poly=document.createElementNS('http://www.w3.org/2000/svg','polygon');
-    poly.setAttribute('points',pts);
-    poly.setAttribute('fill','none');
-    poly.setAttribute('stroke','#ccc');
-    poly.setAttribute('stroke-width','0.5');
-    svg.appendChild(poly);
-    if(v<20){
-      const lbl=document.createElementNS('http://www.w3.org/2000/svg','text');
-      lbl.setAttribute('x',cx+3);lbl.setAttribute('y',cy-s+4);
-      lbl.setAttribute('font-size','9');lbl.setAttribute('fill','#999');
-      lbl.textContent=v;svg.appendChild(lbl);
-    }
+    const s=(v/max)*sc;
+    const p=document.createElementNS('http://www.w3.org/2000/svg','polygon');
+    p.setAttribute('points',`${cx},${cy-s} ${cx+s},${cy} ${cx},${cy+s} ${cx-s},${cy}`);
+    p.setAttribute('fill','none');p.setAttribute('stroke','#ccc');p.setAttribute('stroke-width','0.5');
+    g.appendChild(p);
+    if(v<20){const l=document.createElementNS('http://www.w3.org/2000/svg','text');l.setAttribute('x',cx+2);l.setAttribute('y',cy-s+4);l.setAttribute('font-size','8');l.setAttribute('fill','#aaa');l.textContent=v;g.appendChild(l);}
   });
-
-  const axes=[{k:'A',dx:0,dy:-1,lx:cx,ly:cy-scale-16,lbl:'성향 A',c:'#1A9E75'},{k:'B',dx:-1,dy:0,lx:cx-scale-30,ly:cy+4,lbl:'성향 B',c:'#D85A30'},{k:'C',dx:1,dy:0,lx:cx+scale+6,ly:cy+4,lbl:'성향 C',c:'#555'},{k:'D',dx:0,dy:1,lx:cx,ly:cy+scale+18,lbl:'성향 D',c:'#2BAB7A'}];
-  axes.forEach(ax=>{
-    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
-    line.setAttribute('x1',cx);line.setAttribute('y1',cy);
-    line.setAttribute('x2',cx+ax.dx*scale);line.setAttribute('y2',cy+ax.dy*scale);
-    line.setAttribute('stroke','#bbb');line.setAttribute('stroke-width','0.5');line.setAttribute('stroke-dasharray','4,3');
-    svg.appendChild(line);
+  [{k:'A',lx:cx,ly:cy-sc-12,lbl:'성향 A',c:'#1A9E75'},{k:'B',lx:cx-sc-28,ly:cy+4,lbl:'성향 B',c:'#D85A30'},{k:'C',lx:cx+sc+8,ly:cy+4,lbl:'성향 C',c:'#555'},{k:'D',lx:cx,ly:cy+sc+16,lbl:'성향 D',c:'#2BAB7A'}].forEach(ax=>{
     const t=document.createElementNS('http://www.w3.org/2000/svg','text');
-    t.setAttribute('x',ax.lx);t.setAttribute('y',ax.ly);
-    t.setAttribute('text-anchor','middle');t.setAttribute('font-size','11');t.setAttribute('font-weight','500');t.setAttribute('fill',ax.c);
-    t.textContent=ax.lbl;svg.appendChild(t);
+    t.setAttribute('x',ax.lx);t.setAttribute('y',ax.ly);t.setAttribute('text-anchor','middle');t.setAttribute('font-size','10');t.setAttribute('font-weight','500');t.setAttribute('fill',ax.c);
+    t.textContent=ax.lbl;g.appendChild(t);
   });
-
-  const vals={A:totals.A,B:totals.B,C:totals.C,D:totals.D};
-  const aY=cy-(vals.A/max)*scale, bX=cx-(vals.B/max)*scale, cX=cx+(vals.C/max)*scale, dY=cy+(vals.D/max)*scale;
+  const aY=cy-(totals.A/max)*sc,bX=cx-(totals.B/max)*sc,cX=cx+(totals.C/max)*sc,dY=cy+(totals.D/max)*sc;
   const poly=document.createElementNS('http://www.w3.org/2000/svg','polygon');
   poly.setAttribute('points',`${cx},${aY} ${cX},${cy} ${cx},${dY} ${bX},${cy}`);
-  poly.setAttribute('fill','#2BAB7A44');poly.setAttribute('stroke','#2BAB7A');poly.setAttribute('stroke-width','1.5');
-  svg.appendChild(poly);
+  poly.setAttribute('fill','#2BAB7A33');poly.setAttribute('stroke','#2BAB7A');poly.setAttribute('stroke-width','1.5');
+  g.appendChild(poly);
 }
 
-function resetAll(){
-  document.querySelectorAll('input[type=radio]').forEach(r=>r.checked=false);
-  document.getElementById('result').className='result-section';
-  document.getElementById('progress').textContent='0 / 16 응답';
-  window.scrollTo({top:0,behavior:'smooth'});
+function reset(){
+  cur=0;answers=new Array(16).fill(0);
+  document.getElementById('result').className='result-wrap';
+  document.getElementById('diag').style.display='none';
+  document.getElementById('intro').style.display='block';
 }
 </script>
